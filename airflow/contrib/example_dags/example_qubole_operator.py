@@ -65,7 +65,7 @@ t1 = QuboleOperator(
     fetch_logs=True,
     # If `fetch_logs`=true, will fetch qubole command logs and concatenate
     # them into corresponding airflow task logs
-    tags='aiflow_example_run',
+    tags='airflow_example_run',
     # To attach tags to qubole command, auto attach 3 tags - dag_id, task_id, run_id
     qubole_conn_id='qubole_default',
     # Connection id to submit commands inside QDS, if not set "qubole_default" is used
@@ -198,7 +198,7 @@ import org.apache.spark._
 
 /** Computes an approximation to pi */
 object SparkPi {
-  def main(args: Array[String]) {
+  def main(args: Array[string]) {  # noqa
     val conf = new SparkConf().setAppName("Spark Pi")
     val spark = new SparkContext(conf)
     val slices = if (args.length > 0) args(0).toInt else 2
@@ -220,7 +220,7 @@ t11 = QuboleOperator(
     program=prog,
     language='scala',
     arguments='--class SparkPi',
-    tags='aiflow_example_run',
+    tags='airflow_example_run',
     dag=dag)
 
 t11.set_upstream(branching)

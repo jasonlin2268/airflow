@@ -33,34 +33,35 @@ class S3ToGoogleCloudStorageOperator(S3ListOperator):
     destination path.
 
     :param bucket: The S3 bucket where to find the objects. (templated)
-    :type bucket: string
+    :type bucket: str
     :param prefix: Prefix string which filters objects whose name begin with
         such prefix. (templated)
-    :type prefix: string
+    :type prefix: str
     :param delimiter: the delimiter marks key hierarchy. (templated)
-    :type delimiter: string
+    :type delimiter: str
     :param aws_conn_id: The source S3 connection
-    :type aws_conn_id: string
-    :parame verify: Whether or not to verify SSL certificates for S3 connection.
+    :type aws_conn_id: str
+    :param verify: Whether or not to verify SSL certificates for S3 connection.
         By default SSL certificates are verified.
         You can provide the following values:
-        - False: do not validate SSL certificates. SSL will still be used
+
+        - ``False``: do not validate SSL certificates. SSL will still be used
                  (unless use_ssl is False), but SSL certificates will not be
                  verified.
-        - path/to/cert/bundle.pem: A filename of the CA cert bundle to uses.
+        - ``path/to/cert/bundle.pem``: A filename of the CA cert bundle to uses.
                  You can specify this argument if you want to use a different
                  CA cert bundle than the one used by botocore.
     :type verify: bool or str
     :param dest_gcs_conn_id: The destination connection ID to use
         when connecting to Google Cloud Storage.
-    :type dest_gcs_conn_id: string
+    :type dest_gcs_conn_id: str
     :param dest_gcs: The destination Google Cloud Storage bucket and prefix
         where you want to store the files. (templated)
-    :type dest_gcs: string
+    :type dest_gcs: str
     :param delegate_to: The account to impersonate, if any.
         For this to work, the service account making the request must have
         domain-wide delegation enabled.
-    :type delegate_to: string
+    :type delegate_to: str
     :param replace: Whether you want to replace existing destination files
         or not.
     :type replace: bool
@@ -153,8 +154,9 @@ class S3ToGoogleCloudStorageOperator(S3ListOperator):
 
             files = list(set(files) - set(existing_files))
             if len(files) > 0:
-                self.log.info('{0} files are going to be synced: {1}.'.format(
-                    len(files), files))
+                self.log.info(
+                    '%s files are going to be synced: %s.', len(files), files
+                )
             else:
                 self.log.info(
                     'There are no new files to sync. Have a nice day!')
