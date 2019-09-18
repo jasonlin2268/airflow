@@ -125,7 +125,7 @@ def create_app(config=None, testing=False):
         av(vs.VariableView(
             models.Variable, Session, name="Variables", category="Admin"))
         av(vs.UploadDagView(
-            Session, name="UploadDag", category="Admin"))
+            name="UploadDag", category="Admin"))
         av(vs.XComView(
             models.XCom, Session, name="XComs", category="Admin"))
 

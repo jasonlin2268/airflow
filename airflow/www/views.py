@@ -2598,14 +2598,6 @@ class UploadDagView(wwwutils.DataProfilingMixin):
     verbose_name = "UploadDagView"
     verbose_name_plural = "UploadDagView"
 
-    # Default flask-admin export functionality doesn't handle serialized json
-    @action('varexport', 'Export', None)
-    @provide_session
-    def action_varexport(self, ids, session=None):
-        pass
-
-    def on_form_prefill(self, form, id):
-        pass
 
 class VariableView(wwwutils.DataProfilingMixin, AirflowModelView):
     verbose_name = "Variable"
