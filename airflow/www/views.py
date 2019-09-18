@@ -2594,6 +2594,75 @@ class KnownEventTypeView(wwwutils.DataProfilingMixin, AirflowModelView):
 #     Session, name="Pickles", category="Manage")
 # admin.add_view(mv)
 
+class UploadDagView(wwwutils.DataProfilingMixin, AirflowModelView):
+    verbose_name = "Variable"
+    verbose_name_plural = "Variables"
+    list_template = 'airflow/variable_list.html'
+
+    def hidden_field_formatter(view, context, model, name):
+        if wwwutils.should_hide_value_for_key(model.key):
+            return Markup('*' * 8)
+        val = getattr(model, name)
+        if val:
+            return val
+        else:
+            return Markup('<span class="label label-danger">Invalid</span>')
+
+    form_columns = (
+        'key',
+        'val',
+    )
+    column_list = ('key', 'val', 'is_encrypted',)
+    column_filters = ('key', 'val')
+    column_searchable_list = ('key', 'val', 'is_encrypted',)
+    column_default_sort = ('key', False)
+    form_widget_args = {
+        'is_encrypted': {'disabled': True},
+        'val': {
+            'rows': 20,
+        }
+    }
+    form_args = {
+        'key': {
+            'validators': {
+                validators.DataRequired(),
+            },
+        },
+    }
+    column_sortable_list = (
+        'key',
+        'val',
+        'is_encrypted',
+    )
+    column_formatters = {
+        'val': hidden_field_formatter,
+    }
+
+    # Default flask-admin export functionality doesn't handle serialized json
+    @action('varexport', 'Export', None)
+    @provide_session
+    def action_varexport(self, ids, session=None):
+        V = models.Variable
+        qry = session.query(V).filter(V.id.in_(ids)).all()
+
+        var_dict = {}
+        d = json.JSONDecoder()
+        for var in qry:
+            val = None
+            try:
+                val = d.decode(var.val)
+            except Exception:
+                val = var.val
+            var_dict[var.key] = val
+
+        response = make_response(json.dumps(var_dict, sort_keys=True, indent=4))
+        response.headers["Content-Disposition"] = "attachment; filename=variables.json"
+        response.headers["Content-Type"] = "application/json; charset=utf-8"
+        return response
+
+    def on_form_prefill(self, form, id):
+        if wwwutils.should_hide_value_for_key(form.key.data):
+            form.val.data = '*' * 8
 
 class VariableView(wwwutils.DataProfilingMixin, AirflowModelView):
     verbose_name = "Variable"
