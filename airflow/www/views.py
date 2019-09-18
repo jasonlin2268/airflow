@@ -2594,7 +2594,7 @@ class KnownEventTypeView(wwwutils.DataProfilingMixin, AirflowModelView):
 #     Session, name="Pickles", category="Manage")
 # admin.add_view(mv)
 
-class UploadDagView(wwwutils.DataProfilingMixin, AirflowModelView):
+class UploadDagView(AirflowModelView):
     verbose_name = "Variable"
     verbose_name_plural = "Variables"
     list_template = 'airflow/variable_list.html'
