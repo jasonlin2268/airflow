@@ -2594,7 +2594,7 @@ class KnownEventTypeView(wwwutils.DataProfilingMixin, AirflowModelView):
 #     Session, name="Pickles", category="Manage")
 # admin.add_view(mv)
 
-class UploadDagView(AirflowModelView):
+class UploadDagView(wwwutils.DataProfilingMixin):
     verbose_name = "UploadDagView"
     verbose_name_plural = "UploadDagView"
 
