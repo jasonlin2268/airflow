@@ -34,7 +34,6 @@ from airflow.models.taskinstance import clear_task_instances, TaskInstance  # no
 from airflow.models.taskreschedule import TaskReschedule  # noqa: F401
 from airflow.models.variable import Variable  # noqa: F401
 from airflow.models.xcom import XCom, XCOM_RETURN_KEY  # noqa: F401
-from airflow.models.uploaddag import Uploaddag  # noqa: F401
 
 # Classes that are remove in 2.0
 from airflow.models.knownevent import KnownEvent, KnownEventType  # noqa: F401
