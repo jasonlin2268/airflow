@@ -2595,9 +2595,7 @@ class KnownEventTypeView(wwwutils.DataProfilingMixin, AirflowModelView):
 # admin.add_view(mv)
 
 class UploadDagView(wwwutils.DataProfilingMixin):
-    verbose_name = "UploadDagView"
-    verbose_name_plural = "UploadDagView"
-
+    pass
 
 class VariableView(wwwutils.DataProfilingMixin, AirflowModelView):
     verbose_name = "Variable"
