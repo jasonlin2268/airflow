@@ -2149,6 +2149,27 @@ class Airflow(AirflowViewMixin, BaseView):
 
         return redirect('/admin/variable')
 
+    @expose('/dagimport', methods=['POST'])
+    @login_required
+    def dagimport(self):
+        try:            
+            from werkzeug import secure_filename
+            # 获取上传过来的文件对象
+            file = request.files['file']
+            # 检查文件对象是否存在
+            if file:
+                # 去除文件名中不合法的内容
+                filename = secure_filename(file.filename)
+                # 将文件保存在本地UPLOAD_FOLDER目录下
+                file_folder = configuration.get('core', 'DAGS_FOLDER')
+                file.save(os.path.join(file_folder, filename))
+                flash("Upload Successfully") 
+            else:
+                flash("No file")
+        except Exception as e:
+            flash("Missing file or syntax error: {}.".format(e))
+
+        return redirect('/admin/uploaddagview')
 
 class HomeView(AirflowViewMixin, AdminIndexView):
     @expose("/")
@@ -2594,8 +2615,18 @@ class KnownEventTypeView(wwwutils.DataProfilingMixin, AirflowModelView):
 #     Session, name="Pickles", category="Manage")
 # admin.add_view(mv)
 
-class UploadDagView(wwwutils.DataProfilingMixin):
-    pass
+class UploadDagView(wwwutils.DataProfilingMixin, AirflowViewMixin, BaseView):
+    @expose('/')
+    def view(self):
+        # Render information
+        title = "Upload Dag"
+        # 调用函数生成 csrf_token
+        from flask_wtf.csrf import generate_csrf
+        csrf_token = generate_csrf()
+        return self.render('airflow/uploaddag.html',
+                           title=title,
+                           csrf=csrf_token)
+    
 
 class VariableView(wwwutils.DataProfilingMixin, AirflowModelView):
     verbose_name = "Variable"
